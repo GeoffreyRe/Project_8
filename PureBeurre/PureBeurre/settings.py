@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'users',
     'products',
     'pages',
-    'search'
+    'search',
+    'favorites'
 ]
 
 MIDDLEWARE = [

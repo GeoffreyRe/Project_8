@@ -1,1 +1,3 @@
 env/
+.vscode/
+PureBeurre/PureBeurre/__pycache__/

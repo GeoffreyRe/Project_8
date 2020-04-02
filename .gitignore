@@ -7,3 +7,9 @@ PureBeurre/pages/__pycache__/
 PureBeurre/search/__pycache__/
 PureBeurre/favorites/__pycache__/
 PureBeurre/profiles/__pycache__/
+PureBeurre/favorites/migrations/__pycache__/
+PureBeurre/pages/migrations/__pycache__/
+PureBeurre/products/migrations/__pycache__/
+PureBeurre/profiles/migrations/__pycache__/
+PureBeurre/search/migrations/__pycache__/
+PureBeurre/users/migrations/__pycache__/

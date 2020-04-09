@@ -130,3 +130,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+
+AUTH_USER_MODEL = "users.User" # variable qui définit le modèle user à utiliser par django

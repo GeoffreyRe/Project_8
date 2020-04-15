@@ -1,5 +1,6 @@
 env/
 .vscode/
+PureBeurre/openfoodfact/__pycache__/
 PureBeurre/PureBeurre/__pycache__/
 PureBeurre/users/__pycache__/
 PureBeurre/products/__pycache__/

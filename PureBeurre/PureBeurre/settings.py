@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'pages',
     'search',
     'favorites',
-    'profiles'
+    'profiles',
+    'openfoodfact'
 ]
 
 MIDDLEWARE = [

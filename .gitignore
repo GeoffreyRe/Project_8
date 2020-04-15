@@ -14,4 +14,6 @@ PureBeurre/products/migrations/__pycache__/
 PureBeurre/profiles/migrations/__pycache__/
 PureBeurre/search/migrations/__pycache__/
 PureBeurre/users/migrations/__pycache__/
+PureBeurre/openfoodfact/migrations/__pycache__/
+PureBeurre/openfoodfact/management/commands/__pycache__/
 base_de_donnees_p8.png

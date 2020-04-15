@@ -1,7 +1,7 @@
 import sys
 import requests
 import json
-from productparser import ProductParser
+from . import productparser
 from django.conf import settings
 
 class Api():
@@ -13,7 +13,7 @@ class Api():
             ]
     def __init__(self):
         self.products_list = {}
-        self.checker = ProductParser()
+        self.checker = productparser.ProductParser()
 
     def get_categories_list_from_json(self):
         with open("static/json/categories.json", "r", encoding="utf8") as file:

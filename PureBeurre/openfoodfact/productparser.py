@@ -1,4 +1,4 @@
-class ProductParser():
+class ProductParser:
     
     @staticmethod
     def separate_brands(brands):

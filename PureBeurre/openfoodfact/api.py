@@ -4,7 +4,7 @@ import json
 from . import productparser
 from django.conf import settings
 
-class Api():
+class Api:
     KEYS = [
                 "_id", "nutrition_grades",
                 "product_name", "url", "brands",

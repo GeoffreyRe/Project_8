@@ -30,6 +30,7 @@ class Api:
         products_dict = {}
         for category_dict in categories_list:
             for sub_category in category_dict["sub-category"]:
+                #TODO changer le HTTP LINK
                 HTTP_LINK = ("https://be-fr.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&"
                             "tagtype_0=categories&tag_contains_0=contains&tag_0={}"
                             "&sort_by=unique_scans_n&page_size=200&json=1")
@@ -39,6 +40,7 @@ class Api:
                 except:
                     print("une erreur est survenue lors de l'envoi/la récupération de la requête HTTP")
                     sys.exit()
+                #TODO checker statut réponse
                 request = request.json()["products"]
                 parsed_products = self.retrieve_informations_from_products(request)
                 products_dict[sub_category] = parsed_products
@@ -67,15 +69,3 @@ class Api:
         return products_list_parsed
 
 
-if __name__ == "__main__":
-    off = Api()
-    result = off.get_request_response_from_api()
-    for key, element in result.items():
-        print("-----------------------------")
-        print("\n\n\n")
-        for value in element:
-            print(key)
-            for k, v in value.items():
-                print(k, ":",v)
-            print("\n\n\n")
-            input()

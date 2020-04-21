@@ -12,7 +12,7 @@ class Command(BaseCommand):
             categories_list = json.load(file)
 
         return categories_list
-    
+    #TODO Créer des managers pour les modèles
     def fill_categories(self):
         categories_list = self.get_categories_list_from_json()
         for category_dict in categories_list:
@@ -28,7 +28,7 @@ class Command(BaseCommand):
                 except:
                     raise CommandError("Impossible d'eneregistrer la sous-categorie {}".format(sub_category.name))
 
-    def fill_product(self):
+    def fill_products(self):
         off = Api()
         results = off.get_request_response_from_api()
         for category_dict in self.get_categories_list_from_json():
@@ -53,9 +53,12 @@ class Command(BaseCommand):
 
 
     def handle(self, *args, **options):
-        with transaction.atomic():
-            self.fill_categories()
-            self.fill_product()
-        
-        self.stdout.write("Commande effectuée avec succès")
+        if len(Product.objects.all()) > 0:
+            self.stdout.write("La base de données est déjà remplie")
+        else:
+            with transaction.atomic():
+                self.fill_categories()
+                self.fill_products()
+            
+            self.stdout.write("Commande effectuée avec succès")
         

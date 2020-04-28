@@ -7,3 +7,18 @@ header.masthead
     background-size: cover;
 
 }
+
+.container
+{
+    position:relative;
+}
+.welcome-user
+{
+    background-color:greenyellow;
+    display:inline-block;
+    color:white;
+    position:absolute;
+    margin:auto;
+    bottom:0;
+
+}

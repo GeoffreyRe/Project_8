@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'search',
     'favorites',
     'profiles',
-    'openfoodfact'
+    'openfoodfact',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -134,3 +135,5 @@ STATICFILES_DIRS = (
 
 
 AUTH_USER_MODEL = "users.User" # variable qui définit le modèle user à utiliser par django
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

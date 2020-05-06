@@ -137,3 +137,12 @@ STATICFILES_DIRS = (
 AUTH_USER_MODEL = "users.User" # variable qui définit le modèle user à utiliser par django
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+"""
+LOGIN_URL define where Django has to redirect the user if he tries to call
+a view wich is decorated with @login_required and if the user is not
+authenticated
+
+"""
+
+LOGIN_URL = 'user/login'

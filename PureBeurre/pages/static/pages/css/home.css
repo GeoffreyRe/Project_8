@@ -12,13 +12,15 @@ header.masthead
 {
     position:relative;
 }
-.welcome-user
+.welcome
 {
-    background-color:greenyellow;
-    display:inline-block;
+    background-color:rgb(46,126,50);
     color:white;
-    position:absolute;
-    margin:auto;
+    width:max-content;
+    position:fixed;
+    left:20px;
+    padding:0.2em;
     bottom:0;
+    z-index:12;
 
 }

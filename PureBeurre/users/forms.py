@@ -10,3 +10,11 @@ class SignUpForm(forms.Form):
     helper.add_input(Submit('submit', 'Submit', css_class='btn btn-primary d-block mt-5 w-min mx-auto'))
     helper.form_method = 'POST'
 
+
+class LoginForm(forms.Form):
+    username = forms.CharField(label="Nom d'utilisateur", max_length=100)
+    password = forms.CharField(label="mot de passe", max_length=32, widget=forms.PasswordInput)
+    helper = FormHelper()
+    helper.add_input(Submit('submit', 'Submit', css_class='btn btn-primary d-block mt-5 w-min mx-auto'))
+    helper.form_method = 'POST'
+

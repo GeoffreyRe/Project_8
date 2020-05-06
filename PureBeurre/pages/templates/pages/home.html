@@ -8,6 +8,11 @@
 {% endblock %}
 
 {% block content %}
+{% if messages %}
+    {% for message in messages %}
+    <p class="welcome"> {{message}} <span class="cross"><a class="message text-white" href="#"><i class="fas fa-times-circle ml-1"></a></i></span> </p>
+    {% endfor %}
+{% endif %}
 <header class="masthead">
     <div class="container h-100">
         <div class="row h-100 align-items-center justify-content-center text-center">
@@ -86,4 +91,15 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block javascript_scripts %}
+<script>
+    let circleElt = document.getElementsByClassName("cross")[0]
+    let messageElt = document.getElementsByClassName("welcome")[0]
+    circleElt.addEventListener("click", function(e){
+        messageElt.style.display = "none" 
+        console.log("click")
+    })
+</script>
 {% endblock %}

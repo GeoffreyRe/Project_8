@@ -3,6 +3,9 @@ from django.test import TestCase, Client
 # Create your tests here.
 
 class PagesViewTest(TestCase):
+    """
+    This class contains tests about views of application 'pages'
+    """
     
     @classmethod
     def setUpTestData(cls):

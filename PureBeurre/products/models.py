@@ -6,7 +6,13 @@ import json
 
 #with add a method to the manager (objects) of Product 
 class ProductManager(models.Manager):
+    """
+    custom manager for Product model
+    """
     def fill_products(self):
+        """
+        This method fills database with products given by API
+        """
         off = Api()
         results = off.get_request_response_from_api()
         with open("static/json/categories.json", "r", encoding="utf8") as file:
@@ -31,11 +37,24 @@ class ProductManager(models.Manager):
                             product.save(force_insert=True)
                         except IntegrityError:
                             pass
+    
+    def get_products_by_term(self, term):
+        """
+        This method returns a list of products wich match with a specific term
+        """
+        return self.filter(product_name__contains=term)
+
 
 
 # We add a method to the manager (objects) of Category
 class CategoryManager(models.Manager):
+    """
+    Custom manager for Category model
+    """
     def fill_categories(self):
+        """
+        This method fill categories into database
+        """
         with open("static/json/categories.json", "r", encoding="utf8") as file:
             categories_list = json.load(file)
         for category_dict in categories_list:
@@ -53,6 +72,9 @@ class CategoryManager(models.Manager):
 
 # Create your models here.
 class Product(models.Model):
+    """
+    Product model : contains informations about product such as barcode or product name...
+    """
     barcode = models.CharField(max_length=20, primary_key=True)
     product_name = models.CharField(max_length=80)
     brand = models.CharField(max_length=80)
@@ -68,6 +90,9 @@ class Product(models.Model):
         return self.product_name
 
 class Category(models.Model):
+    """
+    Category model : contains informations about category such as its name
+    """
     name = models.CharField(max_length=50)
     parent_category = models.ForeignKey("Category", on_delete=models.CASCADE, blank=True, null=True)
     objects = CategoryManager()

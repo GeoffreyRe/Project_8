@@ -2,3 +2,6 @@ env/
 .vscode/
 __pycache__/
 base_de_donnees_p8.png
+.coverage
+geckodriver.log
+db.sqlite3

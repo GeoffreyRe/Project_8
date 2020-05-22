@@ -5,6 +5,9 @@ from . import productparser
 from django.conf import settings
 
 class Api:
+    """
+    This class handle interactions with openfoodfacts's API
+    """
     KEYS = [
                 "_id", "nutrition_grades",
                 "product_name", "url", "brands",
@@ -16,6 +19,9 @@ class Api:
         self.checker = productparser.ProductParser()
 
     def get_categories_list_from_json(self):
+        """
+        We retrieve informations wich is inside a json file
+        """
         with open("static/json/categories.json", "r", encoding="utf8") as file:
             categories_list = json.load(file)
 
@@ -30,7 +36,7 @@ class Api:
         products_dict = {}
         for category_dict in categories_list:
             for sub_category in category_dict["sub-category"]:
-                #TODO changer le HTTP LINK
+                #we make get request for each sub-category
                 HTTP_LINK = ("https://be-fr.openfoodfacts.org/cgi/search.pl?search_simple=1&action=process&"
                             "tagtype_0=categories&tag_contains_0=contains&tag_0={}"
                             "&sort_by=unique_scans_n&page_size=200&json=1")
@@ -40,14 +46,17 @@ class Api:
                 except:
                     print("une erreur est survenue lors de l'envoi/la récupération de la requête HTTP")
                     sys.exit()
-                #TODO checker statut réponse
-                request = request.json()["products"]
+                request = request.json()["products"] 
+                #we retrieve informations about products of a sub-category
                 parsed_products = self.retrieve_informations_from_products(request)
                 products_dict[sub_category] = parsed_products
         return products_dict
                 
     
     def retrieve_informations_from_products(self, products_list):
+        """
+        retrieve informations we need about each product
+        """
         products_list_parsed = []
         for product in products_list:
             product_values = {}

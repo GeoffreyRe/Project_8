@@ -5,6 +5,9 @@ from django.contrib import auth
 
 # Create your tests here.
 class UsersViewTest(TestCase):
+    """
+    This class contains tests of views of 'users' application
+    """
     @classmethod
     def setUpTestData(cls):
         """

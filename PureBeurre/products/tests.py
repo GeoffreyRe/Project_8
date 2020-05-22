@@ -1,10 +1,58 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from products.models import Product, Category
 from django.db import IntegrityError
 from unittest.mock import patch
 
 # Create your tests here.
+
+class ProductsViewTest(TestCase):
+    """
+    This class contains tests of views of 'product' application
+    """
+    
+    @classmethod
+    def setUpTestData(cls):
+        """
+        This function is executed once at the beginning of test launching
+        """
+        pass
+
+    def setUp(self):
+        """
+        This function is executed each time a new test function is executed
+        """
+        self.client = Client()
+        self.cat = Category.objects.create(name="Lait", parent_category=None)
+        Product.objects.create(barcode="1234",
+                                        product_name="Lait",
+                                        brand="Lactel",
+                                        url_page="www.test.com",
+                                        image_url="www.image-test.com",
+                                        image_nutrition_url="www.nut-image.com",
+                                        nutrition_grade="A",
+                                        nutrition_score=5,
+                                        category=self.cat)
+
+    def test_view_detail_product_return_response_200_if_product_exists(self):
+        response = self.client.get('/product/1234')
+        self.assertEqual(response.request["REQUEST_METHOD"], "GET")
+        self.assertEqual(response.status_code, 200)
+
+    def test_view_detail_product_response_contains_informations_about_product(self):
+        response = self.client.get('/product/1234')
+        self.assertContains(response, "Lait")
+        self.assertContains(response, "Marque du produit : Lactel")
+
+    def test_view_detail_product_return_response_404_if_product_doesnt_exists(self):
+        response = self.client.get('/product/1111111')
+        self.assertEqual(response.request["REQUEST_METHOD"], "GET")
+        self.assertEqual(response.status_code, 404)
+
+
 class ProductModelTest(TestCase):
+    """
+    This class contains tests about Product Model
+    """
     
     @classmethod
     def setUpTestData(cls):
@@ -77,6 +125,9 @@ class ProductModelTest(TestCase):
                                 ordered=False, transform=str)
 
 class CategoryModelTest(TestCase):
+    """
+    This class contains tests about Category model
+    """
     
     @classmethod
     def setUpTestData(cls):

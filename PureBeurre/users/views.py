@@ -9,7 +9,11 @@ from django.contrib import messages
 # Create your views here.
 
 def sign_up(request):
+    """
+    This view render sign_up form and allows user to create an account (and handle cases where an account already exists etc...)
+    """
     if request.method == 'POST':
+        #import pdb; pdb.set_trace()
         form = SignUpForm(request.POST)
         if form.is_valid():
             try:
@@ -27,6 +31,9 @@ def sign_up(request):
 
 
 def login(request):
+    """
+    This view render login form and allows user to login (and handle cases where an account not exists etc...)
+    """
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -43,6 +50,9 @@ def login(request):
     return render(request, 'users/login.html', {"form" : form, 'user_exists' : True})
 
 def logout(request):
+    """
+    This view allows user to logout
+    """
     out(request)
     messages.add_message(request, messages.INFO, 'Revenez vite nous voir !')
     return redirect('/home')

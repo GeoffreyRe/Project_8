@@ -10,6 +10,9 @@ from openfoodfact.productparser import ProductParser
 Test class for custom Django command
 """
 class TestCommand(TestCase):
+    """
+    This class contains tests about the custom command
+    """
 
     @classmethod
     def setUpTestData(cls):
@@ -40,6 +43,9 @@ class TestCommand(TestCase):
 Test class for Api class
 """
 class TestApi(TestCase):
+    """
+    This class contains tests about API class
+    """
 
     @classmethod
     def setUpTestData(cls):
@@ -145,6 +151,9 @@ class TestApi(TestCase):
 Test class for ProductParser class
 """
 class TestProductParser(TestCase):
+    """
+    This class contains tests about ProductParser class
+    """
 
     @classmethod
     def setUpTestData(cls):

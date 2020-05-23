@@ -40,7 +40,7 @@
                 <img class="mr-2" src="{% static 'assets/img/logo_pur_beurre.png' %}" style="width:30px;"><h1 class="navbar-brand"><a href="{% url 'home' %}" class="home_link">Pur Beurre</a></h1><button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ml-auto my-2 my-lg-0 d-flex align-items-center">
-                        {% if not 'home' in request.path %}
+                        {% if request.path != "/" %}
                             <li class="nav-item d-flex flex-row align-items-center">
                                 <form class="form-inline d-flex justify-content-center" action="{% url 'search_products_post' %}" method="post">
                                     {% csrf_token %}
@@ -50,11 +50,11 @@
                             </li>
                         {% endif %}
                         {% if user.is_authenticated %}
-                        <li class="nav-item color-white"><a class="nav-link" href="{% url 'profile' %}"><i class="fas fa-user fa-2x"></i></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'user_favorites' %}"><i class="fas fa-carrot fa-2x"></i></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt fa-2x"></i></a></li>
+                        <li class="nav-item color-white"><a class="nav-link" title="Mon compte utilisateur" href="{% url 'profile' %}"><i class="fas fa-user fa-2x"></i></a></li>
+                        <li class="nav-item"><a class="nav-link" title="Mes favoris" href="{% url 'user_favorites' %}"><i class="fas fa-carrot fa-2x"></i></a></li>
+                        <li class="nav-item"><a class="nav-link" title="Me déconnecter" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt fa-2x"></i></a></li>
                         {% else %}
-                        <li class="nav-item"><a class="nav-link" id='link_to_login' href="{% url 'login' %}"><i class="fas fa-sign-in-alt fa-2x"></i></a></li>
+                        <li class="nav-item"><a class="nav-link" title="Me connecter" id='link_to_login' href="{% url 'login' %}"><i class="fas fa-sign-in-alt fa-2x"></i></a></li>
                         {% endif%}
                     </ul>
                 </div>

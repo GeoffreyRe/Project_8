@@ -16,9 +16,12 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Favorite',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='favorite_products', to='products.Product')),
-                ('substitute', models.ForeignKey(db_column='substitute_barcode', on_delete=django.db.models.deletion.CASCADE, related_name='favorite_substitutes', to='products.Product')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
+                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                              related_name='favorite_products', to='products.Product')),
+                ('substitute', models.ForeignKey(db_column='substitute_barcode',
+                                                 on_delete=django.db.models.deletion.CASCADE, related_name='favorite_substitutes', to='products.Product')),
             ],
         ),
     ]

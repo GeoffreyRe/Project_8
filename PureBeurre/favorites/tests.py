@@ -7,6 +7,7 @@ from products.models import Product, Category
 from .models import Favorite
 from django.contrib.auth import logout
 
+
 # Create your tests here.
 class FavoritesManagerTest(TestCase):
     """
@@ -46,10 +47,12 @@ class FavoritesManagerTest(TestCase):
                                          nutrition_score=12,
                                          category=self.cat)
         self.eric = User.objects.create_user('Eric', 'eric@test.com', '1111')
-        self.mathieu = User.objects.create_user('Mathieu', 'mathieu@test.com', '1112')
-        Favorite.objects.create(user=self.eric, product=self.p1, substitute=self.p2)
-        Favorite.objects.create(user=self.mathieu, product=self.p1, substitute=self.p3)
-
+        self.mathieu = User.objects.create_user(
+            'Mathieu', 'mathieu@test.com', '1112')
+        Favorite.objects.create(
+            user=self.eric, product=self.p1, substitute=self.p2)
+        Favorite.objects.create(
+            user=self.mathieu, product=self.p1, substitute=self.p3)
 
     def test_manager_method_return_set_of_favorites(self):
         """This method tests if manager method returns favorites"""
@@ -96,15 +99,17 @@ class FavoritesViewsTest(TestCase):
                                          nutrition_grade="A",
                                          nutrition_score=3,
                                          category=self.cat)
-        Favorite.objects.create(user=self.user1, product=self.p1, substitute=self.p2)
+        Favorite.objects.create(
+            user=self.user1, product=self.p1, substitute=self.p2)
 
     def test_user_favorites_returns_favorites_of_logged_user(self):
         """This method tests if user_favorites returns favorites of user"""
         response = self.client.get('/favorite/')
         fav_of_user = Favorite.objects.get_favorites_from_user(self.user1)
         self.assertEqual(response.status_code, 200)
-        #we check if all element inside querysets are equal
-        self.assertTrue(all(a == b for a, b in zip(fav_of_user, response.context['favorites'])))
+        # we check if all element inside querysets are equal
+        self.assertTrue(all(a == b for a, b in zip(
+            fav_of_user, response.context['favorites'])))
         self.assertTemplateUsed(response, 'favorites/favorites.html')
 
     def test_user_favorites_redirect_user_if_not_logged(self):
@@ -112,7 +117,6 @@ class FavoritesViewsTest(TestCase):
         logout(self.client)
         response = self.client.get('/favorite/')
         self.assertEqual(response.status_code, 302)
-
 
     def test_add_favorites_add_favorite_to_favorites_of_user(self):
         """This method tests if add favorites work well"""
@@ -128,7 +132,8 @@ class FavoritesViewsTest(TestCase):
         self.client.get('/favorite/1234/123456')
         fav_of_user = Favorite.objects.get_favorites_from_user(self.user1)
         expected = ["Lait1 remplacé par Lait2", "Lait1 remplacé par Lait3"]
-        self.assertTrue(all(str(a) == b for a, b in zip(fav_of_user, expected)))
+        self.assertTrue(
+            all(str(a) == b for a, b in zip(fav_of_user, expected)))
 
     def test_add_favorites_redirect_user_if_not_logged(self):
         """"This method tests if add_favorites view redirects user if not logged"""
@@ -141,4 +146,3 @@ class FavoritesViewsTest(TestCase):
         if favorite is already in database"""
         response = self.client.get('/favorite/1234/12345')
         self.assertEqual(response.status_code, 302)
-      

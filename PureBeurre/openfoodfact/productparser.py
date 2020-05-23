@@ -2,7 +2,7 @@ class ProductParser:
     """
     This class contains methods that will analyse products that API has returned
     """
-    
+
     @staticmethod
     def separate_brands(brands):
         """
@@ -12,8 +12,8 @@ class ProductParser:
             brands_list = brands.split(",")
             return brands_list[0].strip()
         return brands
-    @staticmethod
 
+    @staticmethod
     def check_if_empty_values(product):
         """
         Check if any information of a product is missing

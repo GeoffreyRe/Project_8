@@ -7,6 +7,7 @@ from .managers import FavoriteManager
 
 # Create your models here.
 
+
 class Favorite(models.Model):
     """
     This is the favorite model wich contains products save as favorites by the user
@@ -19,6 +20,7 @@ class Favorite(models.Model):
                                    db_column="substitute_barcode",
                                    related_name="favorite_substitutes")
     objects = FavoriteManager()
+
     class Meta:
         """
         This class is used to pass some meta-datas

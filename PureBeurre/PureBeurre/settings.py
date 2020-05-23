@@ -65,7 +65,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'templates') # This line adds the directory "templates" wich is a subdirectory of variable BASE_DIR
+            # This line adds the directory "templates" wich is a subdirectory of variable BASE_DIR
+            os.path.join(BASE_DIR, 'templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -86,11 +87,9 @@ WSGI_APPLICATION = 'PureBeurre.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default' : {
-        'ENGINE' : 'django.db.backends.postgresql',
-        'NAME' : 'purbeurre',
-        'USER' : 'purbeurre',
-        'PASSWORD' : 'purbeurrepass'
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
 
     }
 }
@@ -140,7 +139,8 @@ STATICFILES_DIRS = (
 )
 
 
-AUTH_USER_MODEL = "users.User" # variable qui définit le modèle user à utiliser par django
+# variable qui définit le modèle user à utiliser par django
+AUTH_USER_MODEL = "users.User"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -156,5 +156,5 @@ LOGIN_URL = 'user/login'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
-
-django_heroku.settings(locals())
+if os.environ.get("ENV") == "production":
+    django_heroku.settings(locals())

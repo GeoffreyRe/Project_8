@@ -2,11 +2,12 @@ from django.test import TestCase, Client
 
 # Create your tests here.
 
+
 class PagesViewTest(TestCase):
     """
     This class contains tests about views of application 'pages'
     """
-    
+
     @classmethod
     def setUpTestData(cls):
         """
@@ -21,9 +22,9 @@ class PagesViewTest(TestCase):
         self.client = Client()
 
     def test_home_view_has_status_code_200(self):
-        response = self.client.get('/home/')
+        response = self.client.get('')
         self.assertEqual(response.status_code, 200)
 
     def test_home_view_content_is_home_template(self):
-        response = self.client.get('/home/')
+        response = self.client.get('')
         self.assertContains(response, "Du gras, oui, Mais de Qualité !")

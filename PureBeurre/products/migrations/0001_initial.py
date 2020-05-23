@@ -15,15 +15,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=50)),
-                ('parent_category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='products.Category')),
+                ('parent_category', models.ForeignKey(blank=True, null=True,
+                                                      on_delete=django.db.models.deletion.CASCADE, to='products.Category')),
             ],
         ),
         migrations.CreateModel(
             name='Product',
             fields=[
-                ('barcode', models.CharField(max_length=20, primary_key=True, serialize=False)),
+                ('barcode', models.CharField(
+                    max_length=20, primary_key=True, serialize=False)),
                 ('product_name', models.CharField(max_length=80)),
                 ('brand', models.CharField(max_length=80)),
                 ('url_page', models.URLField()),
@@ -31,7 +34,8 @@ class Migration(migrations.Migration):
                 ('image_nutrition_url', models.URLField()),
                 ('nutrition_grade', models.CharField(max_length=1)),
                 ('nutrition_score', models.SmallIntegerField()),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='products.Category')),
+                ('category', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to='products.Category')),
             ],
         ),
     ]

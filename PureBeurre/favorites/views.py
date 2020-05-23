@@ -33,12 +33,12 @@ def add_favorite(request, product_id, substitute_id):
                                Product.objects.get(barcode=substitute_id))
     except IntegrityError:
         # if the product or substitute doesn't exist
-        return redirect('/home')
+        return redirect('/')
     favorite = Favorite(user=user, product=product, substitute=substitute)
     try:
         favorite.save()
     except IntegrityError:
         # if tuple (product, substitute) is already save as favorite
-        return redirect('/home')
+        return redirect('/')
 
     return redirect("user_favorites")

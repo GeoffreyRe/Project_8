@@ -23,9 +23,9 @@ def search_products(request):
     try:
         searched_term = request.GET["p"].strip()
     except KeyError:
-        return redirect('/home')
+        return redirect('/')
     if searched_term == "":
-        return redirect('/home')
+        return redirect('/')
     products_possible = Product.objects.get_products_by_term(searched_term)[:8]
     return render(request, 'search/products_searched.html', {"products": products_possible})
 
@@ -37,12 +37,12 @@ def search_products_post(request):
     if request.method == "POST":
         searched_term = request.POST['term'].strip()
         if searched_term == "":
-            return redirect('/home')
+            return redirect('/')
 
         return redirect('/search?p={}'.format(searched_term))
 
     else:
-        return redirect('/home')
+        return redirect('/')
 
 
 def substitutes_products(request, product_id):

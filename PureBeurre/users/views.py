@@ -43,7 +43,9 @@ def sign_up(request):
                         mail_subject, message, to=[to_email]
                 )
                 email.send()
-                return HttpResponse('Please confirm your email address to complete the registration')
+                messages.add_message(request, messages.INFO,
+                    'Un email vous a été envoyé')
+                return redirect('home')
             except IntegrityError:
                 return render(request, 'users/register.html', {"form": form, "user_exists": True})
 
@@ -68,6 +70,10 @@ def login(request):
             user = authenticate(
                 username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
+                if user.is_active is False:
+                    messages.add_message(request, messages.INFO,
+                        "Votre compte n'est pas encore activé")
+                    return redirect('home')
                 log(request, user)
                 messages.add_message(request, messages.INFO,
                                      'Welcome home, {}'.format(user.username))
@@ -104,7 +110,8 @@ def activate(request, uidb64, token):
         user.is_active = True
         user.save()
         log(request, user)
-        #return redirect('home')
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        messages.add_message(request, messages.INFO,
+                                     'Votre compte est bien confirmé')
+        return redirect('home')
     else:
         return HttpResponse('Activation link is invalid!')

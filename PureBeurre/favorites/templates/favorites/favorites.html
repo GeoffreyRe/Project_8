@@ -13,6 +13,9 @@
         <h1 class="d-block text-center text-white">Vos favoris</h1>
     </div>
     <div class="results bg-white">
+        <div class="btn-export text-center">
+            <a class="btn btn-success" href="{% url 'export' %}" title="exporter mes favoris sous format Json">Exporter mes favoris</a>
+        </div>
         <div class="container">
             <div class="row d-flex justify-content-between text-center">
             {% if not favorites%}

@@ -29,6 +29,8 @@ DEBUG = False if os.environ.get('ENV', 'development') == 'production' else True
 
 ALLOWED_HOSTS = ['.herokuapps.com', 'localhost', '127.0.0.1']
 
+AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.AllowAllUsersModelBackend']
+
 
 # Application definition
 

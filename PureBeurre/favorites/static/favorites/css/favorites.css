@@ -13,8 +13,13 @@ header.masthead
 .results
 {
     min-height: 100vh;
-    padding-top: 4.5rem;
     padding-bottom: 0;
+}
+
+.btn-export
+{
+    padding-bottom:3rem;
+    padding-top:1.2rem;
 }
 
 .product-card

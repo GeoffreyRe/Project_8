@@ -1,9 +1,11 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
 from .models import Favorite
 from django.contrib.auth.decorators import login_required
 from users.models import User
 from products.models import Product
+from .import_export_favorites import serialize_favorites_from_user as serialize
 # Create your views here.
 
 
@@ -42,3 +44,14 @@ def add_favorite(request, product_id, substitute_id):
         return redirect('/')
 
     return redirect("user_favorites")
+
+
+@login_required(login_url='login')
+def export_favorites_from_user(request):
+    current_user_id = request.session.get(
+        "_auth_user_id")
+    user = User.objects.get(id=current_user_id)
+    json_file = serialize(user)
+    response = HttpResponse(json_file, content_type='text/json')
+    response['Content-Disposition'] = 'attachment; filename="favorites_{}.json"'.format(user.username)
+    return response

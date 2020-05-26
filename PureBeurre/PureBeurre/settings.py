@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'favorites',
     'profiles',
     'openfoodfact',
-    'crispy_forms'
+    'crispy_forms',
+    'six'
 ]
 
 MIDDLEWARE = [
@@ -152,8 +153,17 @@ authenticated
 """
 
 LOGIN_URL = 'user/login'
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+"""
+This is email settings
+"""
+# for testing purpose, use : EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'purbeurre.geoffrey.remacle@gmail.com'
+EMAIL_HOST_PASSWORD = 'purbeurre4589'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 
 if os.environ.get("ENV") == "production":

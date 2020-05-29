@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.db import IntegrityError
 from .models import Favorite
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from users.models import User
 from products.models import Product
 # Create your views here.
@@ -33,12 +34,14 @@ def add_favorite(request, product_id, substitute_id):
                                Product.objects.get(barcode=substitute_id))
     except IntegrityError:
         # if the product or substitute doesn't exist
+        messages.info(request, "Produit ou substitut inexistant !")
         return redirect('/')
     favorite = Favorite(user=user, product=product, substitute=substitute)
     try:
         favorite.save()
     except IntegrityError:
         # if tuple (product, substitute) is already save as favorite
+        messages.info(request, "Ce favori existe déjà !")
         return redirect('/')
 
     return redirect("user_favorites")

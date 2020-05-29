@@ -55,7 +55,7 @@ def export_favorites_from_user(request):
         "_auth_user_id")
     user = User.objects.get(id=current_user_id)
     json_file = serialize(user)
-    response = HttpResponse(json_file, content_type='text/json')
+    response = HttpResponse(json_file, content_type='application/json')
     response['Content-Disposition'] = 'attachment; filename="favorites_{}.json"'.format(user.username)
     return response
 

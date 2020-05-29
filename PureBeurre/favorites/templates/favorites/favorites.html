@@ -34,6 +34,18 @@
         </div>
     </div>
 </header>
+<form class="d-flex justify-content-center py-2" action="{% url 'import_json' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" id="import_favorites" name="imported_file" accept=".json, application/json" title="importer un fichier json pour enregistrer de nouveaux favoris !">
+    <button name='button_send' id='button_send' type="submit" class="btn btn-primary">importer</button>
+</form>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 {% endblock %}
 
 {% block javascript_scripts %}

@@ -1,11 +1,14 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.utils.datastructures import MultiValueDictKeyError
 from django.db import IntegrityError
 from .models import Favorite
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from users.models import User
 from products.models import Product
 from .import_export_favorites import serialize_favorites_from_user as serialize
+from .import_export_favorites import find_favorites_from_json, add_favorites_from_json
 # Create your views here.
 
 
@@ -55,3 +58,33 @@ def export_favorites_from_user(request):
     response = HttpResponse(json_file, content_type='text/json')
     response['Content-Disposition'] = 'attachment; filename="favorites_{}.json"'.format(user.username)
     return response
+
+@login_required(login_url='login')
+def import_json_file(request):
+    if request.method == 'POST':
+        try:
+            json_file = request.FILES['imported_file']
+        except (MultiValueDictKeyError, KeyError):
+            messages.error(request, "Aucun fichier n'a été uploadé")
+            return redirect('user_favorites')
+        if not json_file.name.endswith(".json"):
+            messages.error(request, "Le fichier uploadé n'est pas un fichier json")
+            return redirect('user_favorites')
+        binary_datas = json_file.read()
+        #import pdb; pdb.set_trace()
+        fav_list_to_add = find_favorites_from_json(binary_datas)
+        if type(fav_list_to_add) is tuple:
+            if fav_list_to_add[0] is False:
+                messages.error(request, fav_list_to_add[1])
+                return redirect('user_favorites')
+            else:
+                messages.warning(request, fav_list_to_add[1])
+                fav_list_to_add = fav_list_to_add[2]
+        if len(fav_list_to_add) == 0:
+            messages.error(request, "Aucun produit à ajouter")
+            return redirect('user_favorites')
+        results_dtb = add_favorites_from_json(request, fav_list_to_add)
+        for info in results_dtb:
+            messages.info(request, info)
+        return redirect('user_favorites')
+        

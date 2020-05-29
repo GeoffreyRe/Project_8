@@ -32,7 +32,7 @@ def add_favorite(request, product_id, substitute_id):
     try:
         product, substitute = (Product.objects.get(barcode=product_id),
                                Product.objects.get(barcode=substitute_id))
-    except IntegrityError:
+    except (IntegrityError, Product.DoesNotExist):
         # if the product or substitute doesn't exist
         messages.info(request, "Produit ou substitut inexistant !")
         return redirect('/')

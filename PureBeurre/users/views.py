@@ -28,21 +28,25 @@ def sign_up(request):
                     form.cleaned_data['username'],
                     form.cleaned_data['email'],
                     form.cleaned_data['password'])
+                # until, the user has not activated his account, is_active is False
                 user.is_active = False
                 user.save()
                 current_site = get_current_site(request)
                 mail_subject = "Activez votre compte PurBeurre"
+                # we transform the template into a string
                 message = render_to_string('users/acc_active_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid':urlsafe_base64_encode(force_bytes(user.pk)),
                 'token':account_activation_token.make_token(user),
                 })
+                # email where to send the activation link
                 to_email = form.cleaned_data.get('email')
+                # we create the email
                 email = EmailMessage(
                         mail_subject, message, to=[to_email]
                 )
-                email.send()
+                email.send() # we send it
                 messages.add_message(request, messages.INFO,
                     'Un email vous a été envoyé')
                 return redirect('home')
@@ -70,6 +74,7 @@ def login(request):
             user = authenticate(
                 username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
+                # if user has not yet activated is account, he cannot login
                 if user.is_active is False:
                     messages.add_message(request, messages.INFO,
                         "Votre compte n'est pas encore activé")

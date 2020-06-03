@@ -9,6 +9,7 @@ from users.models import User
 from products.models import Product
 from .import_export_favorites import serialize_favorites_from_user as serialize
 from .import_export_favorites import find_favorites_from_json, add_favorites_from_json
+from .import_export_favorites import file_imported_and_is_json, analyse_fav_to_add
 # Create your views here.
 
 
@@ -51,38 +52,39 @@ def add_favorite(request, product_id, substitute_id):
 
 @login_required(login_url='login')
 def export_favorites_from_user(request):
+    """
+    This view will export a json file that contains
+    favorites of user
+    """
+    # we retrieve user of current session
     current_user_id = request.session.get(
         "_auth_user_id")
     user = User.objects.get(id=current_user_id)
     json_file = serialize(user)
+    # we send file and we specify that the response contains a file to download
     response = HttpResponse(json_file, content_type='application/json')
     response['Content-Disposition'] = 'attachment; filename="favorites_{}.json"'.format(user.username)
     return response
 
 @login_required(login_url='login')
 def import_json_file(request):
+    """
+    This method handle import of json file and recording
+    of new products
+    """
     if request.method == 'POST':
-        try:
-            json_file = request.FILES['imported_file']
-        except (MultiValueDictKeyError, KeyError):
-            messages.error(request, "Aucun fichier n'a été uploadé")
-            return redirect('user_favorites')
-        if not json_file.name.endswith(".json"):
-            messages.error(request, "Le fichier uploadé n'est pas un fichier json")
+        # we check if a file is imported and if it is a json file
+        json_file = file_imported_and_is_json(request)
+        # if methods returns false, we redirects user
+        if json_file is False:
             return redirect('user_favorites')
         binary_datas = json_file.read()
-        #import pdb; pdb.set_trace()
+        # we retrieve informations about products inside file
         fav_list_to_add = find_favorites_from_json(binary_datas)
-        if type(fav_list_to_add) is tuple:
-            if fav_list_to_add[0] is False:
-                messages.error(request, fav_list_to_add[1])
-                return redirect('user_favorites')
-            else:
-                messages.warning(request, fav_list_to_add[1])
-                fav_list_to_add = fav_list_to_add[2]
-        if len(fav_list_to_add) == 0:
-            messages.error(request, "Aucun produit à ajouter")
+        fav_list_to_add = analyse_fav_to_add(fav_list_to_add)
+        if fav_list_to_add is False:
             return redirect('user_favorites')
+        # we try to record new products into dtb and we display messages
         results_dtb = add_favorites_from_json(request, fav_list_to_add)
         for info in results_dtb:
             messages.info(request, info)

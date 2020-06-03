@@ -3,6 +3,8 @@ from django.db import IntegrityError
 from users.models import User
 from products.models import Product
 from json import dumps, loads, JSONDecodeError
+from django.utils.datastructures import MultiValueDictKeyError
+from django.contrib import messages
 
 
 def serialize_favorites_from_user(user):
@@ -99,4 +101,30 @@ def add_favorites_from_json(request, fav_list):
     return generate_messages(products_added, products_already_saved, products_not_found)
 
 
-    
+def file_imported_and_is_json(request):
+    """
+    This method will check if a file is imported inside a request
+    and if this imported file is of type json
+    """
+    try:
+        json_file = request.FILES['imported_file']
+    except (MultiValueDictKeyError, KeyError):
+        messages.error(request, "Aucun fichier n'a été uploadé")
+        return False
+    if not json_file.name.endswith(".json"):
+        messages.error(request, "Le fichier uploadé n'est pas un fichier json")
+        return False
+    return json_file
+
+def analyse_fav_to_add(fav_list_to_add):
+    if type(fav_list_to_add) is tuple:
+        if fav_list_to_add[0] is False:
+            messages.error(request, fav_list_to_add[1])
+            return False
+        else:
+            messages.warning(request, fav_list_to_add[1])
+            fav_list_to_add = fav_list_to_add[2]
+    if len(fav_list_to_add) == 0:
+        messages.error(request, "Aucun produit à ajouter")
+        return False
+    return fav_list_to_add

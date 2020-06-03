@@ -1,6 +1,8 @@
 """
 This module contains tests of app 'favorites'
 """
+import io
+import json
 from django.test import TestCase, Client
 from users.models import User
 from products.models import Product, Category
@@ -146,3 +148,20 @@ class FavoritesViewsTest(TestCase):
         if favorite is already in database"""
         response = self.client.get('/favorite/1234/12345')
         self.assertEqual(response.status_code, 302)
+
+    def test_export_favorites_from_user_returns_favorites_into_a_file(self):
+        response = self.client.get('/favorite/export')
+        # the name of the file has to be 'favorites' + name of user
+        correct_filename = '"favorites_Michello.json"' in response.get("Content-Disposition")
+        self.assertIs(correct_filename, True)
+        json_obj = json.loads(response.content)
+        user_favorite = Favorite.objects.all()[0]
+        fav_infos = {}
+        fav_infos["Code barre produit"] = user_favorite.product.barcode
+        fav_infos["Nom produit"] = user_favorite.product.product_name
+        fav_infos["Code barre substitut"] = user_favorite.substitute.barcode
+        fav_infos["Nom substitut"] = user_favorite.substitute.product_name
+        fav_infos["Marque substitut"] = user_favorite.substitute.brand
+        fav_infos["Marque produit"] = user_favorite.product.brand
+        # we checks if informations inside file is the same has informations about user's favorites
+        self.assertEqual(json_obj, [fav_infos])

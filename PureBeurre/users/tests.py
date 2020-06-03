@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+from django.core import mail
 from users.forms import LoginForm, SignUpForm
 from users.models import User
 from django.contrib import auth
@@ -76,6 +77,11 @@ class UsersViewTest(TestCase):
     def test_login_view_post_request_log_new_user(self):
         response = self.client.post(
             '/user/register/', {"username": 'Michel', "email": "t@test.com", "password": '1234'})
+        new_user = User.objects.get(email="t@test.com")
+        new_user.is_active = True
+        new_user.save()
+        response = self.client.post(
+            '/user/login/', {"username": 'Michel', "password": '1234'})
         self.assertEqual(response.request["REQUEST_METHOD"], "POST")
         user = auth.get_user(self.client)
         self.assertIs(user.is_authenticated, True)
@@ -92,3 +98,59 @@ class UsersViewTest(TestCase):
         self.client.post('/user/logout/')
         user = auth.get_user(self.client)
         self.assertIs(user.is_authenticated, False)
+
+    def test_email_is_send_when_a_new_user_create_an_account(self):
+        response = self.client.post(
+            '/user/register/', {"username": 'Michel', "email": "t@test.com", "password": '1234'})
+        #when testing, django "sends" email to a list named "outbox"
+        #check if an email has been send
+        self.assertEqual(len(mail.outbox), 1)
+        #we check if the mail is the mail to activate user account
+        self.assertEqual(mail.outbox[0].subject,"Activez votre compte PurBeurre")
+        #we check if email has been send to the  user's email
+        self.assertEqual(mail.outbox[0].to[0],"t@test.com")
+
+    def test_is_active_is_false_when_a_new_user_create_an_account(self):
+        response = self.client.post(
+            '/user/register/', {"username": 'Michel', "email": "t@test.com", "password": '1234'}, follow=True)
+        new_user = User.objects.get(email="t@test.com")
+        self.assertIs(new_user.is_active, False)
+        #check if the right message is displayed
+        for message in response.context['messages']:
+            self.assertEqual(str(message), "Un email vous a été envoyé")
+        
+    def test_user_cannot_login_until_is_account_is_validated(self):
+        #new user create an account but has not yet validated is account
+        self.client.post(
+            '/user/register/', {"username": 'Michel', "email": "t@test.com", "password": '1234'})
+        # user try to login
+        response = self.client.post(
+            '/user/login/', {"username": 'Michel', "password": '1234'}, follow=True)
+        session_user = auth.get_user(self.client)
+        # check if user is not authenticated
+        self.assertIs(session_user.is_authenticated, False)
+        #check if the right message is displayed
+        for message in response.context['messages']:
+            self.assertIn(str(message), ["Un email vous a été envoyé","Votre compte n'est pas encore activé"])
+
+    def test_activate_view_change_is_active_attribute_to_true(self):
+        response = self.client.post(
+            '/user/register/', {"username": 'Michel', "email": "t@test.com", "password": '1234'})
+        new_user = User.objects.get(email="t@test.com")
+        # make sure the user is created but his account is not active
+        self.assertIs(new_user.is_active, False)
+        min_index = mail.outbox[0].body.find("/user/")
+        route =  mail.outbox[0].body[min_index:]
+        max_index = len(mail.outbox[0].body)
+        route = route[:max_index-2]
+        #we simulate that the user clicks on the link inside the email
+        response = self.client.get(route, follow=True)
+        new_user = User.objects.get(email="t@test.com")
+        #if everything is works, the account of user is now active
+        self.assertIs(new_user.is_active, True)
+        #we checks the messages
+        for message in response.context['messages']:
+            self.assertIn(str(message), ["Un email vous a été envoyé","Votre compte est bien confirmé"])
+                
+
+        

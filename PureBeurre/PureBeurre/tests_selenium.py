@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.core import mail
 from users.models import User
 
 
@@ -62,3 +63,6 @@ class SeleniumFunctionalTest(StaticLiveServerTestCase):
         user_attrs = ['Robert123456', 'Robert123456@test.com']
         self.assertEqual([new_user.username, new_user.email], user_attrs)
         self.assertTrue(new_user.check_password('secret_password'))
+        # we check that user has received a mail with activation link to his email
+        self.assertEqual(mail.outbox[0].subject,"Activez votre compte PurBeurre")
+        self.assertEqual(mail.outbox[0].to[0],"Robert123456@test.com")

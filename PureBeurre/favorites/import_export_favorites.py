@@ -1,5 +1,5 @@
 from .models import Favorite
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
 from users.models import User
 from products.models import Product
 from json import dumps, loads, JSONDecodeError
@@ -53,6 +53,9 @@ def find_favorites_from_json(raw_data):
     return fav_barcode_list
 
 def generate_messages(products_added, products_already_saved, products_not_found):
+    """
+    This function creates messages to display to the user.
+    """
     results = []
     if len(products_added) > 0:
         sentence = "le ou les favoris suivants ont été ajoutés : "
@@ -74,15 +77,22 @@ def generate_messages(products_added, products_already_saved, products_not_found
 
 
 def add_favorites_from_json(request, fav_list):
+    """
+    This function adds favorites from json file (previously analysed)
+    to user account. This method handle cases where products cannot be found
+    and products wich are already saved.
+    """
     current_user_id = request.session.get(
         "_auth_user_id")  # We retrieve user id
     user = User.objects.get(id=current_user_id)
+    #import pdb; pdb.set_trace()
     products_not_found = []
     products_already_saved = []
     products_added = []
     for fav in fav_list:
         try:
-            product, substitute = (Product.objects.get(barcode=fav[0]),
+            with transaction.atomic():
+                product, substitute = (Product.objects.get(barcode=fav[0]),
                                 Product.objects.get(barcode=fav[1]))
         except Product.DoesNotExist:
             products_not_found.append(fav)
@@ -91,7 +101,8 @@ def add_favorites_from_json(request, fav_list):
         favorite = Favorite(user=user, product=product, substitute=substitute)
         try:
             # try to add the favorite to database
-            favorite.save()
+            with transaction.atomic():
+                favorite.save()
             # the favorite is added to database
             products_added.append(fav)
         except IntegrityError:
@@ -116,7 +127,7 @@ def file_imported_and_is_json(request):
         return False
     return json_file
 
-def analyse_fav_to_add(fav_list_to_add):
+def analyse_fav_to_add(request, fav_list_to_add):
     if type(fav_list_to_add) is tuple:
         if fav_list_to_add[0] is False:
             messages.error(request, fav_list_to_add[1])

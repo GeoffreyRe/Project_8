@@ -81,7 +81,7 @@ def import_json_file(request):
         binary_datas = json_file.read()
         # we retrieve informations about products inside file
         fav_list_to_add = find_favorites_from_json(binary_datas)
-        fav_list_to_add = analyse_fav_to_add(fav_list_to_add)
+        fav_list_to_add = analyse_fav_to_add(request, fav_list_to_add)
         if fav_list_to_add is False:
             return redirect('user_favorites')
         # we try to record new products into dtb and we display messages

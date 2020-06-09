@@ -4,6 +4,9 @@ This file contains manager of Favorite model
 from django.db import models
 
 
+# -tc- attention globalement à respecter la PEP 257 pour les docstrings. 
+# -tc- je recommande l'utilisation de docformatter 
+# -tc- (pip install docformatter, docformatter --recursive --in-place .)
 class FavoriteManager(models.Manager):
     """
         This class is the manager of favorite model

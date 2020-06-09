@@ -19,6 +19,8 @@ class FavoritesManagerTest(TestCase):
         This function is executed each time a new test function is executed
         """
         self.cat = Category.objects.create(name="Lait", parent_category=None)
+        # -tc- pas courant d'aligner le code comme cela, ce qui crée des niveaux
+        # -tc- d'indentation élevés. Test l'utilisation d'un auto-formateur comme black
         self.p1 = Product.objects.create(barcode="1234",
                                          product_name="Lait1",
                                          brand="Lactel",

@@ -1,9 +1,14 @@
+# -tc- le nom du module porte à confusion. api.py signifie autre chose
+# -tc dans le monde django. quelque chose comme client.py
+
 import sys
 import requests
 import json
+
+# -tc- séparer les imports
 from . import productparser
 
-
+# -tc- OpenfoodfactsClient est peut-être plus descriptif que API.
 class Api:
     """
     This class handle interactions with openfoodfacts's API
@@ -37,16 +42,20 @@ class Api:
         for category_dict in categories_list:
             for sub_category in category_dict["sub-category"]:
                 # we make get request for each sub-category
+                # -tc- dans l'absolu, la bonne manière de créer ce type de lien
+                # -tc- avec requests et d'utiliser un dictionnaire et le paramètre
+                # -tc- process de requests.get()
                 HTTP_LINK = ("https://be-fr.openfoodfacts.org/cgi/search.pl?search_simple=1"
                              "&action=process&tagtype_0=categories&tag_contains_0=contains&tag_0={}"
                              "&sort_by=unique_scans_n&page_size=200&json=1")
                 try:
                     request = requests.get(HTTP_LINK.format(sub_category))
-
+                # -tc- ne jamais avoir voir un except sans exception. Ici, except requests.ConnectionError.
                 except:
                     print(("une erreur est survenue "
                            "lors de l'envoi/la récupération de la requête HTTP"))
                     sys.exit()
+                # -tc- si la requête retourne un status différent de 200, il y a une erreur non gérée.
                 request = request.json()["products"]
                 # we retrieve informations about products of a sub-category
                 parsed_products = self.retrieve_informations_from_products(

@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
+
+# -tc- séparer les imports
 from products.models import Product
 
 # Create your views here.

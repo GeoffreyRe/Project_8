@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-# Create your views here.
+# Create your views here. à éliminer
 
 
 def home(request):
@@ -14,7 +14,7 @@ def legal_notices(request):
     """
     This view renders legal notices template
     """
-
+#-tc- éliminer la ligne vide
     return render(request, "pages/legal_notices.html")
 
 

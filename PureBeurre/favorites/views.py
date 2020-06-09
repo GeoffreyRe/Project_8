@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.db import IntegrityError
 from .models import Favorite
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.contrib import messages 
+
+# -tc- séparer les imports de bibliothèque des imports du projet avec une ligne vide
 from users.models import User
 from products.models import Product
-# Create your views here.
+# Create your views here. -tc- à éliminer
 
 
 # user has to be logged if he want to see favorites
@@ -14,7 +16,8 @@ def user_favorites(request):
     """
     This view allows user to see favorites linked with his account
     """
-    current_user_id = request.session.get(
+    # -tc- le user peut être simplement récupéré avec request.user
+    current_user_id = request.session.get( #
         "_auth_user_id")  # We retrieve user id
     user = User.objects.get(id=current_user_id)
     user_favorites_set = Favorite.objects.get_favorites_from_user(user)
@@ -26,6 +29,7 @@ def add_favorite(request, product_id, substitute_id):
     """
     This view allow a specific user to save a favorite into database
     """
+    # -tc- le user peut être simplement récupéré avec request.user
     current_user_id = request.session.get(
         "_auth_user_id")  # We retrieve user id
     user = User.objects.get(id=current_user_id)

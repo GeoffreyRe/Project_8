@@ -12,6 +12,12 @@ class Favorite(models.Model):
     """
     This is the favorite model wich contains products save as favorites by the user
     """
+    # -tc- Pas courant d'indenter avec autant d'espace. Ce que je recommande
+    # user = models.ForeignKey(
+    #     settings.AUTH_USER_MODEL, 
+    #     on_delete=models.CASCADE,
+    #     related_name="favorites"
+    # )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                              related_name="favorites")
     product = models.ForeignKey("products.Product", on_delete=models.CASCADE,

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+# Create your views here. -tc- à éliminer
 
 
 @login_required(login_url='login')

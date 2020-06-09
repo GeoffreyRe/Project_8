@@ -10,4 +10,4 @@ class DetailProduct(DetailView):
     model = Product
     template_name = "products/detail_product.html"
 
-# Create your views here.
+# Create your views here. -tc- éliminer

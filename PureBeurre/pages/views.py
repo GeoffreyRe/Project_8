@@ -1,6 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
 
 
 def home(request):
@@ -14,7 +13,6 @@ def legal_notices(request):
     """
     This view renders legal notices template
     """
-
     return render(request, "pages/legal_notices.html")
 
 

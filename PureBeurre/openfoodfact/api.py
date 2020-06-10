@@ -1,6 +1,7 @@
 import sys
 import requests
 import json
+
 from . import productparser
 
 
@@ -42,8 +43,10 @@ class Api:
                              "&sort_by=unique_scans_n&page_size=200&json=1")
                 try:
                     request = requests.get(HTTP_LINK.format(sub_category))
+                    if request.status_code != 200:
+                        raise requests.ConnectionError
 
-                except:
+                except requests.ConnectionError:
                     print(("une erreur est survenue "
                            "lors de l'envoi/la récupération de la requête HTTP"))
                     sys.exit()

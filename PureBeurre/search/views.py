@@ -27,7 +27,7 @@ def search_products(request):
         return redirect('/')
     if searched_term == "":
         return redirect('/')
-    products_possible = Product.objects.get_products_by_term(searched_term)[:8]
+    products_possible = Product.objects.get_products_by_term(searched_term)[:9]
     return render(request, 'search/products_searched.html', {"products": products_possible})
 
 

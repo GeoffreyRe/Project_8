@@ -74,8 +74,6 @@ class CategoryManager(models.Manager):
                     raise Error(
                         "Impossible d'eneregistrer la sous-categorie {}".format(sub_category.name))
 
-# Create your models here.
-
 
 class Product(models.Model):
     """

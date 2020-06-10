@@ -98,6 +98,7 @@ class TestApi(TestCase):
         mock_load.return_value = list_json
         # {"products" : [{"_id" : 123, "product_name" : "Lactel"}]}
         mock_requests_get.return_value = MockResponse
+        MockResponse.status_code = 200
         MockResponse.json.return_value = {
             "products": [{"_id": 123, "product_name": "Lactel"}]}
         mock_retrieve.return_value = [{"_id": 123, "product_name": "Lactel"}]
